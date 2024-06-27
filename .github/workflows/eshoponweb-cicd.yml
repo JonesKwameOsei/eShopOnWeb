@@ -8,7 +8,7 @@ env:
   RESOURCE-GROUP: eshoponweb-rg
   LOCATION: uksouth
   TEMPLATE-FILE: infra/webapp.bicep
-  SUBSCRIPTION-ID: 96047339-523f-41da-a50a-c1f7e9a635ec
+  SUBSCRIPTION-ID: mysub_id
   WEBAPP-NAME: eshoponweb-webapp-boutique
 
 
