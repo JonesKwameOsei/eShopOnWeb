@@ -7,7 +7,7 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /app
-COPY ["src/PublicApi.csproj", "PublicApi/"]
+COPY ["*.sln", "PublicApi/"]
 COPY . .
 #COPY ["src/PublicApi/PublicApi.csproj", "./PublicApi/"]
 #RUN dotnet restore "./PublicApi/PublicApi.csproj"
