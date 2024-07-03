@@ -17,7 +17,7 @@ jobs:
     environment: demo
     permissions:
       id-token: write
-      contents: write 
+      contents: write
 
     steps:
       - name: Checkout
@@ -50,10 +50,25 @@ jobs:
           ECR_REPOSITORY: "jones"
           IMAGE_TAG: ${{ steps.tag_version.outputs.tag }}
         run: |
-          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG -f ../eShopOnWeb/src/PublicApi/Dockerfile .
-          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          # Use docker-compose to build and push the image
+          echo "version: '3.8'
+          services:
+            jones:
+              build:
+                context: .
+                dockerfile: ../eShopOnWeb/src/PublicApi/Dockerfile
+              image: $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          " > docker-compose.yml
+          
+          docker-compose build
+          docker-compose push
+          
           echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
-      
+
+      - name: Run container with docker-compose
+        run: |
+          docker-compose up -d
+
       - name: Fill in the new image ID in the Amazon ECS task definition
         id: task-def-1
         uses: aws-actions/amazon-ecs-render-task-definition@v1
